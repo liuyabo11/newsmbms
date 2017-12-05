@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.pb.smbms.dao.UserMapper">
+	<!-- sql片段 -->
+	<sql id="selectUser">
+		select id,userCode,userName,userPassword,gender,birthday,
+		phone,address,userType,createdBy,creationDate,modifyBy,modifyDate from smbms_user
+	</sql>
+	
+	<!-- 登录 -->
+	<select id="login" resultType="User">
+		<include refid="selectUser"/>
+		where userName=#{0} and userPassword=#{1}
+	</select>
+	
+	<!-- 分页查询 -->
+	<!--分页查询所有记录-->
+    <select id="findUserListByPage" resultType="User">
+        <include refid="selectUser"/> where 1=1
+        <if test="userName!=null and userName!=''">
+         	and userName like concat('%',#{userName},'%')
+        </if>
+        limit #{pageIndex},#{pageSize}
+    </select>
+	
+	
+	<!-- 查询总记录数 -->
+	<select id="getTotalCount" resultType="java.lang.Integer">
+		select count(1) from smbms_user where 1=1 
+		<if test="userName!=null and userName!=''">
+         	and userName like concat('%',#{userName},'%')
+        </if>
+	</select>
+	
+	<!-- 新增用户 -->
+	<insert id="addUser" parameterType="User">
+		insert into smbms_user (userCode,userName,userPassword,gender,birthday,
+		phone,address,userType,createdBy,creationDate) 
+		values(#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},
+		#{address},#{userType},#{createdBy},#{creationDate})
+	</insert>
+    
+    
+    <!-- 根据id删除用户 -->
+    <delete id="delUser" parameterType="java.lang.Integer">
+    	delete from smbms_user where id=#{xxx}
+    </delete>
+    
+    <!-- 修改用户的方法 -->
+    <update id="updateUser" parameterType="User">
+    	update smbms_user set userCode=#{userCode},userName=#{userName},userPassword=#{userPassword},
+    	gender=#{gender},birthday=#{birthday},phone=#{phone},address=#{address}
+    	,userType=#{userType},createdBy=#{createdBy},creationDate=#{creationDate},modifyBy=#{modifyBy}
+    	,modifyDate=#{modifyDate} where id=#{id}
+    </update>
+</mapper>
