@@ -15,6 +15,8 @@ public class ProviderController {
 	@Resource
 	private ProviderService providerService;
 
+	//测试
+
 	/**
 	 * 跳转到providerList页面
 	 * 
